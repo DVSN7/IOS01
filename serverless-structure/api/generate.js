@@ -5,7 +5,51 @@ const chromium = require('@sparticuz/chromium');
  * Serverless function to generate shader art images
  * Compatible with AWS Lambda, Vercel, and other serverless platforms
  */
+
+// AWS Lambda handler
 exports.handler = async (event, context) => {
+    return await handleRequest(event, context);
+};
+
+// Vercel handler (default export for Vercel)
+module.exports = async (req, res) => {
+    try {
+        // Convert Vercel req/res to Lambda format
+        const event = {
+            queryStringParameters: req.query || {},
+            body: req.body ? (typeof req.body === 'string' ? req.body : JSON.stringify(req.body)) : null,
+            httpMethod: req.method
+        };
+        const context = {};
+        
+        const result = await handleRequest(event, context);
+        
+        // Set headers
+        if (result.headers) {
+            Object.keys(result.headers).forEach(key => {
+                res.setHeader(key, result.headers[key]);
+            });
+        }
+        
+        // Send response
+        if (result.isBase64Encoded) {
+            res.status(result.statusCode).send(Buffer.from(result.body, 'base64'));
+        } else {
+            try {
+                const body = JSON.parse(result.body);
+                res.status(result.statusCode).json(body);
+            } catch {
+                res.status(result.statusCode).send(result.body);
+            }
+        }
+    } catch (error) {
+        console.error('Vercel handler error:', error);
+        res.status(500).json({ error: 'Internal server error', message: error.message });
+    }
+};
+
+// Main request handler (works for both Lambda and Vercel)
+async function handleRequest(event, context) {
     let browser = null;
     let localServer = null;
     
@@ -330,8 +374,5 @@ exports.handler = async (event, context) => {
             }),
         };
     }
-};
-
-// For Vercel serverless functions
-module.exports = exports.handler;
+}
 
