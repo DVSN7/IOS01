@@ -1,0 +1,8 @@
+node_modules/
+.serverless/
+.vercel/
+*.log
+test-output.png
+.env
+.DS_Store
+

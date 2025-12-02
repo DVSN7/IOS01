@@ -1,0 +1,21 @@
+{
+  "name": "shader-generator-api",
+  "version": "1.0.0",
+  "description": "Serverless API for generating shader art images",
+  "main": "api/generate.js",
+  "scripts": {
+    "dev": "serverless offline",
+    "deploy": "serverless deploy",
+    "deploy:vercel": "vercel",
+    "test": "node test-local.js",
+    "server": "node test-server.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^21.0.0",
+    "@sparticuz/chromium": "^131.0.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-offline": "^13.0.0"
+  }
+}

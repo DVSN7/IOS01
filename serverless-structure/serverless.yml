@@ -1,0 +1,33 @@
+service: shader-generator-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  timeout: 30
+  memorySize: 3008
+  environment:
+    HTML_PATH: ${env:HTML_PATH, ''}
+  
+functions:
+  generate:
+    handler: api/generate.handler
+    events:
+      - http:
+          path: generate
+          method: get
+          cors: true
+      - http:
+          path: generate
+          method: post
+          cors: true
+    timeout: 30
+    memorySize: 3008
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+
