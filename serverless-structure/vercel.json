@@ -1,4 +1,14 @@
 {
-  "version": 2
+  "version": 2,
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": ".",
+  "functions": {
+    "api/generate.js": {
+      "maxDuration": 30
+    },
+    "api/test.js": {
+      "maxDuration": 10
+    }
+  }
 }
 
