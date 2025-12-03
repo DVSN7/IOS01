@@ -6,12 +6,7 @@ const chromium = require('@sparticuz/chromium');
  * Compatible with AWS Lambda, Vercel, and other serverless platforms
  */
 
-// AWS Lambda handler
-exports.handler = async (event, context) => {
-    return await handleRequest(event, context);
-};
-
-// Vercel handler (default export for Vercel)
+// Vercel handler (must be default export)
 module.exports = async (req, res) => {
     try {
         // Convert Vercel req/res to Lambda format
@@ -375,4 +370,9 @@ async function handleRequest(event, context) {
         };
     }
 }
+
+// AWS Lambda handler (for AWS deployments)
+exports.handler = async (event, context) => {
+    return await handleRequest(event, context);
+};
 
